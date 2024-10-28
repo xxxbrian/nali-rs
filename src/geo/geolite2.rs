@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 
 use maxminddb::geoip2;
+use sys_locale::get_locale;
 
 use super::geodb::{GeoDB, GeoLocation};
 
@@ -10,12 +11,26 @@ pub struct GeoLite2 {
 }
 
 impl GeoLite2 {
-    // new with mmdb location
     pub fn new(mmdb_path: &str) -> Self {
         let reader = maxminddb::Reader::open_readfile(mmdb_path).unwrap();
+        let l_code = if let Some(locale) = get_locale() {
+            match locale.as_str() {
+                l if l.starts_with("de") => "de",
+                l if l.starts_with("en") => "en",
+                l if l.starts_with("es") => "es",
+                l if l.starts_with("fr") => "fr",
+                l if l.starts_with("ja") => "ja",
+                l if l.starts_with("pt") => "pt",
+                l if l.starts_with("ru") => "ru",
+                l if l.starts_with("zh") => "zh-CN",
+                _ => "en",
+            }
+        } else {
+            "en" // Default to English if locale is unavailable
+        };
         Self {
             reader,
-            language: String::from("zh-CN"),
+            language: String::from(l_code),
         }
     }
 
