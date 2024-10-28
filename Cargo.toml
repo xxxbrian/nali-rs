@@ -2,6 +2,11 @@
 name = "nali"
 version = "0.1.0"
 edition = "2021"
+license-file = "LICENSE"
+keywords = ["nali", "nali-rs", "geoip"]
+categories = ["command-line-utilities"]
+repository = "https://github.com/xxxbrian/nali-rs"
+description = "A command-line tool that enriches IP addresses with GeoIP information, enhancing network diagnostics with geographical context."
 
 [dependencies]
 colored = "2.1.0"
