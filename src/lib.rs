@@ -1,11 +1,13 @@
 use std::fmt::Display;
 
+pub mod fast_parser;
 pub mod geo;
 pub mod parser;
 pub mod regex_parser;
 pub mod token;
 
 use colored::Colorize;
+pub use fast_parser::FastParser;
 pub use parser::Parser;
 pub use regex_parser::RegexParser;
 pub use token::Token;
