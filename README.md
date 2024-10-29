@@ -4,6 +4,12 @@
 
 This project is a Rust-based rewrite of the original [Nali project](https://github.com/zu1k/nali), which was originally developed in Golang.
 
+## Installation
+
+```
+cargo install nali
+```
+
 ## Usage
 
 ### Query a simple IP address with `pipe`
