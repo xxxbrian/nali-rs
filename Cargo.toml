@@ -19,5 +19,15 @@ serde_derive = "1.0.214"
 sys-locale = "0.3.1"
 toml = "0.8.19"
 
+[dev-dependencies]
+criterion = "0.5.1"
+fake = { version = "2.10.0", features = ["derive"] }
+rand = "0.8.5"
+
+[[bench]]
+name = "parse_benchmark"
+harness = false
+path = "benches/parser_benchmark.rs"
+
 [profile.release]
 opt-level = 3
