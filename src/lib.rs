@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+pub mod config;
 pub mod fast_parser;
 pub mod geo;
 pub mod parser;

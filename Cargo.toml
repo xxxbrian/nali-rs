@@ -14,7 +14,10 @@ dirs = "5.0.1"
 lazy_static = "1.5.0"
 maxminddb = "0.24.0"
 regex = "1.11.1"
+serde = { version = "1.0.214", features = ["derive"] }
+serde_derive = "1.0.214"
 sys-locale = "0.3.1"
+toml = "0.8.19"
 
 [profile.release]
 opt-level = 3

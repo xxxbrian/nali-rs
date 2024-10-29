@@ -36,15 +36,10 @@ struct IPv6Token {
     start: usize,
 }
 
-pub struct FastParser<G: GeoDB> {
-    db: G,
-}
+#[derive(Default)]
+pub struct FastParser {}
 
-impl<G: GeoDB> FastParser<G> {
-    pub fn new(db: G) -> Self {
-        Self { db }
-    }
-
+impl FastParser {
     // Check if two ranges are overlapping
     fn is_overlapping(start1: usize, end1: usize, start2: usize, end2: usize) -> bool {
         start1 < end2 && start2 < end1
@@ -301,12 +296,12 @@ impl<G: GeoDB> FastParser<G> {
     }
 }
 
-impl<G: GeoDB> Parser for FastParser<G> {
+impl<G: GeoDB> Parser<G> for FastParser {
     fn name(&self) -> &str {
         "fast"
     }
 
-    fn parse(&self, input: &str) -> NaliText {
+    fn parse(&self, input: &str, db: &G) -> NaliText {
         let mut tokens: Vec<Token> = Vec::new();
         let mut matches: Vec<(usize, usize, Token)> = Vec::new();
         let ipv4_matches = self.match_ipv4(input);
@@ -314,20 +309,12 @@ impl<G: GeoDB> Parser for FastParser<G> {
 
         ipv4_matches.iter().for_each(|(start, end)| {
             let ip = &input[*start..*end];
-            matches.push((
-                *start,
-                *end,
-                Token::IPv4(ip.to_string(), self.db.lookup(ip)),
-            ));
+            matches.push((*start, *end, Token::IPv4(ip.to_string(), db.lookup(ip))));
         });
 
         ipv6_matches.iter().for_each(|(start, end)| {
             let ip = &input[*start..*end];
-            matches.push((
-                *start,
-                *end,
-                Token::IPv6(ip.to_string(), self.db.lookup(ip)),
-            ));
+            matches.push((*start, *end, Token::IPv6(ip.to_string(), db.lookup(ip))));
         });
 
         // Sort matches by start position

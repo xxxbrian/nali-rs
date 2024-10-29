@@ -26,15 +26,10 @@ lazy_static! {
     .unwrap();
 }
 
-pub struct RegexParser<G: GeoDB> {
-    db: G,
-}
+#[derive(Default)]
+pub struct RegexParser {}
 
-impl<G: GeoDB> RegexParser<G> {
-    pub fn new(db: G) -> Self {
-        Self { db }
-    }
-
+impl RegexParser {
     // Check if two ranges are overlapping
     fn is_overlapping(start1: usize, end1: usize, start2: usize, end2: usize) -> bool {
         start1 < end2 && start2 < end1
@@ -50,12 +45,12 @@ impl<G: GeoDB> RegexParser<G> {
     }
 }
 
-impl<G: GeoDB> Parser for RegexParser<G> {
+impl<G: GeoDB> Parser<G> for RegexParser {
     fn name(&self) -> &str {
         "regex"
     }
 
-    fn parse(&self, input: &str) -> NaliText {
+    fn parse(&self, input: &str, db: &G) -> NaliText {
         let mut tokens = Vec::new();
         let mut last_end = 0;
 
@@ -68,10 +63,7 @@ impl<G: GeoDB> Parser for RegexParser<G> {
             matches.push((
                 ip_match.start(),
                 ip_match.end(),
-                Token::IPv4(
-                    ip_match.as_str().to_string(),
-                    self.db.lookup(ip_match.as_str()),
-                ),
+                Token::IPv4(ip_match.as_str().to_string(), db.lookup(ip_match.as_str())),
             ));
         }
 
@@ -80,10 +72,7 @@ impl<G: GeoDB> Parser for RegexParser<G> {
             matches.push((
                 ip_match.start(),
                 ip_match.end(),
-                Token::IPv6(
-                    ip_match.as_str().to_string(),
-                    self.db.lookup(ip_match.as_str()),
-                ),
+                Token::IPv6(ip_match.as_str().to_string(), db.lookup(ip_match.as_str())),
             ));
         }
 

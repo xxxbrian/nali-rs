@@ -5,3 +5,9 @@ pub struct GeoLocation {
 pub trait GeoDB {
     fn lookup(&self, ip: &str) -> Option<GeoLocation>;
 }
+
+impl GeoDB for Box<dyn GeoDB> {
+    fn lookup(&self, ip: &str) -> Option<GeoLocation> {
+        (**self).lookup(ip)
+    }
+}
